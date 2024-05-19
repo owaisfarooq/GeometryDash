@@ -7,34 +7,47 @@
 class Game {
 public:
     Game( int windowWidth, int windowHeight, bool* pause );
-    void update();
+    void update( float deltaTime );
     void draw( sf::RenderWindow& window );
     void jump();
     void reset();
-    void increaseObsticleSpeed();
-    void decreaseObsticleSpeed();
+    void increaseObstacleSpeed();
+    void decreaseObstacleSpeed();
+    bool isPlayerTouchingObstacle();
 private:
     sf::RectangleShape player;
     sf::RectangleShape obstacle;
     sf::Text score;
+    sf::Text startingText;
     sf::Font font;
+    sf::Texture backgroundTexture;
+    sf::Sprite backgroundSprite1;
+    sf::Sprite backgroundSprite2;
     sf::Vector2f playerStartingPosition;
-    sf::Vector2f obsticleStartingPosition;
+    sf::Vector2f obstacleStartingPosition;
     sf::SoundBuffer JumpAudio;
     sf::SoundBuffer GameOverAudio;
     sf::SoundBuffer BonusAudio;
     sf::Sound soundPlayer;
     time_t startTime;
-    bool* pausePtr;
+    float backgroundSpeed;
+
+    float backgroundPosition;
     float maxJumpingHeight;
     float jumpIncrement;
     float obstacleSpeed;
-    float obstacleSpeedIncremenet;
+    float obstacleSpeedIncrement;
     float scoreCount;
+
+    bool* pausePtr;
     bool isJumping;
-    void updateScoreText();
-    void resetObsticlePosition();
+
+    void resetObstaclePosition();
     void resetPlayerPosition();
+    void updateScoreText();
+    void resetStats();
+    void updateStats();
+    void moveBackground(float deltaTime);
 };
 
 #endif // GAME_H
