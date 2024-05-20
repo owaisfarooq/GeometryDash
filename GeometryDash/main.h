@@ -5,3 +5,10 @@
 #include "Game.h"
 #include <string.h>
 #include <ctime>
+enum GameState {
+    MENU,
+    SETTINGS,
+    INSTRUCTIONS,
+    STATS,
+    PLAYING
+};

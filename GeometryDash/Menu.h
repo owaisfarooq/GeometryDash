@@ -12,6 +12,8 @@ public:
     bool isSettingsButtonPressed( sf::Vector2i mousePosition );
     bool isInstructionsButtonPressed( sf::Vector2i mousePosition );
     bool isStatsButtonPressed( sf::Vector2i mousePosition );
+    sf::Texture backgroundTexture;
+    sf::Sprite backgroundSprite;
 
 private:
     sf::Font font;

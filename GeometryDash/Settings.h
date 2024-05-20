@@ -2,21 +2,18 @@
 #define SETTINGS_H
 
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include <string>
 
 class Settings {
 public:
-    enum class PlayerShape {
-        Rectangle,
-        Triangle,
-        Diamond,
-        Rhombus
-    };
-
     Settings( float width, float height );
+
     void draw( sf::RenderWindow& window );
     void handleEvent( sf::Event& event, sf::RenderWindow& window );
 
-    PlayerShape getPlayerShape() const;
+    sf::Color getSelectedColor() const;
+    std::string getSelectedShape() const;
 
 private:
     sf::Font font;
@@ -26,14 +23,15 @@ private:
     float volume;
 
     sf::Text shapeText;
-    sf::Text rectangleOption;
-    sf::Text triangleOption;
-    sf::Text diamondOption;
-    sf::Text rhombusOption;
+    std::vector<sf::Text> shapeOptions;
+    int selectedShapeIndex;
 
-    PlayerShape playerShape;
+    sf::Text colorText;
+    std::vector<sf::RectangleShape> colorOptions;
+    int selectedColorIndex;
 
-    void updateShapeSelection( sf::Vector2i mousePosition );
+    void updateShapeSelection( float width, float height );
+    void updateColorSelection( float width, float height );
 };
 
 #endif // SETTINGS_H

@@ -9,7 +9,11 @@ Game::Game( int windowWidth, int windowHeight, bool* pause ) {
     playerStartingPosition = sf::Vector2f( 100, windowHeight - 100 );
     obsticleStartingPosition = sf::Vector2f( windowWidth , windowHeight - 70 );
 
-    player.setSize( sf::Vector2f( 30, 30 ) );
+    player.setPointCount( 4 );
+    player.setPoint( 0, sf::Vector2f( 0, 0 ) );
+    player.setPoint( 1, sf::Vector2f( 50, 0 ) );
+    player.setPoint( 2, sf::Vector2f( 50, 50 ) );
+    player.setPoint( 3, sf::Vector2f( 0, 50 ) );
     player.setFillColor( sf::Color::Green );
     player.setPosition( playerStartingPosition );
 
@@ -26,7 +30,7 @@ Game::Game( int windowWidth, int windowHeight, bool* pause ) {
     startingText.setFont( font );
     startingText.setCharacterSize( 24 );
     startingText.setFillColor( sf::Color::White );
-    startingText.setString("Press R to start\nPress P to pause\nPress ESC to go to menu");
+    startingText.setString("Press Space to start / resume\nPress P to pause\nPress ESC to go to menu\nPress R to restart.");
     float textWidth = startingText.getLocalBounds().width;
     float textHeight = startingText.getLocalBounds().height;
     startingText.setPosition( ( windowWidth - textWidth ) / 2, ( windowHeight - textHeight ) / 2 );
@@ -37,7 +41,7 @@ Game::Game( int windowWidth, int windowHeight, bool* pause ) {
     GameOverAudio.loadFromFile( "Resources/audio/Game-Over.wav" );
 
     scoreCount = 0;
-    jumpIncrement = 1000.0f; // pixels per second
+    jumpIncrement = 900.0f; // pixels per second
     maxJumpingHeight = 500.0f; // adjusted for higher jump
     isJumping = false;
     obstacleSpeedIncremenet = 50.0f; // pixels per second
@@ -82,7 +86,7 @@ void Game::update( float deltaTime ) {
     }
 
     
-    if ( isPlayerTouchingObsticle() ) {
+    if ( isPlayerTouchingObstacle() ) {
         player.setFillColor( sf::Color::Red );
         soundPlayer.setBuffer( GameOverAudio );
         soundPlayer.play();
@@ -93,7 +97,7 @@ void Game::update( float deltaTime ) {
 
     } else {
         moveBackground( deltaTime );
-        player.setFillColor( sf::Color::Green );
+        player.setFillColor( playerFillColor );
         scoreCount += 2.0f * deltaTime;
         if ( player.getPosition() == playerStartingPosition ) {
         }
@@ -124,7 +128,7 @@ void Game::moveBackground(float deltaTime) {
     }
 }
 
-bool Game::isPlayerTouchingObsticle() {
+bool Game::isPlayerTouchingObstacle() {
     // Use smaller bounding boxes for collision detection
     sf::FloatRect playerBounds = player.getGlobalBounds();
     sf::FloatRect obstacleBounds = obstacle.getGlobalBounds();
@@ -159,23 +163,50 @@ void Game::resetPlayerPosition() {
     player.setPosition( playerStartingPosition );
 }
 
-void Game::increaseObsticleSpeed() {
+void Game::increaseObstacleSpeed() {
     obstacleSpeed += obstacleSpeedIncremenet;
 }
 
-void Game::decreaseObsticleSpeed() {
+void Game::decreaseObstacleSpeed() {
     if ( obstacleSpeed > obstacleSpeedIncremenet ) {
         obstacleSpeed -= obstacleSpeedIncremenet;
     }
 }
 
+void Game::setPlayerShape( const std::string& shape ) {
+    if ( shape == "Rhombus" ) {
+        player.setPointCount( 4 );
+        player.setPoint( 0, sf::Vector2f( 25, 0 ) );
+        player.setPoint( 1, sf::Vector2f( 50, 25 ) );
+        player.setPoint( 2, sf::Vector2f( 25, 50 ) );
+        player.setPoint( 3, sf::Vector2f( 0, 25 ) );
+    } else if ( shape == "Diamond" ) {
+        player.setPointCount( 4 );
+        player.setPoint( 0, sf::Vector2f( 25, 0 ) );
+        player.setPoint( 1, sf::Vector2f( 50, 25 ) );
+        player.setPoint( 2, sf::Vector2f( 25, 50 ) );
+        player.setPoint( 3, sf::Vector2f( 0, 25 ) );
+    } else if ( shape == "Square" ) {
+        player.setPointCount( 4 );
+        player.setPoint( 0, sf::Vector2f( 0, 0 ) );
+        player.setPoint( 1, sf::Vector2f( 50, 0 ) );
+        player.setPoint( 2, sf::Vector2f( 50, 50 ) );
+        player.setPoint( 3, sf::Vector2f( 0, 50 ) );
+    }
+}
+
+void Game::setPlayerColor( sf::Color color ) {
+    playerFillColor = color;
+    player.setFillColor( playerFillColor );
+}
+
 void Game::draw( sf::RenderWindow& window ) {
+    window.draw( backgroundSprite1 );
+    window.draw( backgroundSprite2 );
+
     if ( ( *pausePtr ) ) {
         window.draw( startingText );
     }
-
-    window.draw( backgroundSprite1 );
-    window.draw( backgroundSprite2 );
 
     window.draw( player );
     window.draw( obstacle );
@@ -199,9 +230,15 @@ void Game::updateScoreText() {
 }
 
 void Game::jump() {
-    if ( player.getPosition().y == playerStartingPosition.y ) {
-        soundPlayer.setBuffer( JumpAudio );
-        soundPlayer.play();
-        isJumping = true;
+    if ( *pausePtr ) {
+        return;
     }
+
+    if ( !( player.getPosition().y == playerStartingPosition.y ) ) {
+        return;
+    }
+
+    soundPlayer.setBuffer( JumpAudio );
+    soundPlayer.play();
+    isJumping = true;
 }

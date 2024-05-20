@@ -14,8 +14,11 @@ public:
     void increaseObstacleSpeed();
     void decreaseObstacleSpeed();
     bool isPlayerTouchingObstacle();
+    void setPlayerShape( const std::string& shape );
+    void setPlayerColor( sf::Color color );
 private:
-    sf::RectangleShape player;
+    //sf::RectangleShape player;
+    sf::ConvexShape player;
     sf::RectangleShape obstacle;
     sf::Text score;
     sf::Text startingText;
@@ -24,25 +27,25 @@ private:
     sf::Sprite backgroundSprite1;
     sf::Sprite backgroundSprite2;
     sf::Vector2f playerStartingPosition;
-    sf::Vector2f obstacleStartingPosition;
+    sf::Vector2f obsticleStartingPosition;
     sf::SoundBuffer JumpAudio;
     sf::SoundBuffer GameOverAudio;
     sf::SoundBuffer BonusAudio;
     sf::Sound soundPlayer;
     time_t startTime;
+    sf::Color playerFillColor;
     float backgroundSpeed;
-
     float backgroundPosition;
     float maxJumpingHeight;
     float jumpIncrement;
     float obstacleSpeed;
-    float obstacleSpeedIncrement;
+    float obstacleSpeedIncremenet;
     float scoreCount;
 
     bool* pausePtr;
     bool isJumping;
 
-    void resetObstaclePosition();
+    void resetObsticlePosition();
     void resetPlayerPosition();
     void updateScoreText();
     void resetStats();

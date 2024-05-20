@@ -8,14 +8,6 @@
 
 using namespace sf;
 
-enum GameState {
-    MENU,
-    SETTINGS,
-    INSTRUCTIONS,
-    STATS,
-    PLAYING
-};
-
 bool pause = false;
 
 void handleMenuState( Event& event, GameState& gameState, Menu& menu, RenderWindow& window ) {
@@ -34,15 +26,13 @@ void handleMenuState( Event& event, GameState& gameState, Menu& menu, RenderWind
     }
 }
 
-void handlePlayingState( Event& event, GameState& gameState, Game& game ) {
-    if ( event.type == Event::KeyPressed ) {
-        handlePlayingState( event, gameState, game );
-    }
+void applySettings( Game& game, const Settings& settings ) {
+    game.setPlayerShape( settings.getSelectedShape() );
+    game.setPlayerColor( settings.getSelectedColor() );
 }
 
-
 int main() {
-    int length = 800, width = 1000;
+    int length = 700, width = 1400;
     RenderWindow window( VideoMode( width, length ), "Geometry Dash" );
 
     GameState gameState = GameState::MENU;
@@ -53,7 +43,7 @@ int main() {
     Instructions instructions( width, length );
 
     Clock clock;
-    const float timeStep = 1.0f / 60.0f; // 60 updates per second
+    const float timeStep = 1.0f / 60.0f; // 60 updates per secondi
     float accumulator = 0.0f;
 
     while ( window.isOpen() ) {
@@ -62,7 +52,6 @@ int main() {
             if ( event.type == Event::Closed ) {
                 window.close();
             }
-
             if ( gameState == GameState::MENU ) {
                 handleMenuState( event, gameState, menu, window );
                 
@@ -70,6 +59,7 @@ int main() {
                 settings.handleEvent( event, window );
                 if ( event.type == Event::KeyPressed && event.key.code == Keyboard::Escape ) {
                     gameState = GameState::MENU;
+                    applySettings( game, settings );
                 }
             } else if ( gameState == GameState::INSTRUCTIONS ) {
                 if ( event.type == Event::KeyPressed && event.key.code == Keyboard::Escape ) {
@@ -81,30 +71,37 @@ int main() {
                 }
             } else if ( gameState == GameState::PLAYING ) {
                 if ( event.type == Event::KeyPressed ) {
-                    if ( event.key.code == Keyboard::Backspace ) {
+                    bool isLost = game.isPlayerTouchingObstacle();
+                    if ( event.key.code == sf::Keyboard::Backspace ) {
                         std::cout << "DEBUG BREAK";
                     }
-                    if ( event.key.code == Keyboard::P ) {
-                        pause = !pause;
+                    if ( event.key.code == sf::Keyboard::P && !isLost ) {
+                        pause = true;
                     }
-                    if ( event.key.code == Keyboard::R ) {
+                    if ( event.key.code == sf::Keyboard::R && isLost ) {
                         game.reset();
                     }
-                    if ( event.key.code == Keyboard::Escape && pause ) {
+                    if ( event.key.code == sf::Keyboard::Space && !isLost ) {
+                        pause = false;
+                    }
+                    if ( event.key.code == sf::Keyboard::Escape && ( pause ) ) {
                         gameState = GameState::MENU;
-                        //window.close();
+                    }
+                    if ( event.key.code == sf::Keyboard::Space ) {
+                        game.jump();
                     }
                     if ( !pause ) {
-                        if ( event.key.code == Keyboard::Space ) {
+                        if ( event.key.code == sf::Keyboard::Space ) {
                             game.jump();
                         }
-                        if ( event.key.code == Keyboard::Up ) {
+                        if ( event.key.code == sf::Keyboard::Up ) {
                             game.increaseObstacleSpeed();
                         }
-                        if ( event.key.code == Keyboard::Down ) {
+                        if ( event.key.code == sf::Keyboard::Down ) {
                             game.decreaseObstacleSpeed();
                         }
                     }
+
                 }
             }
         }

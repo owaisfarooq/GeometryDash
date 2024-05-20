@@ -30,9 +30,13 @@ Menu::Menu( float width, float height ) {
     statsButton.setFillColor( sf::Color::White );
     statsButton.setPosition( sf::Vector2f( width / 2 - statsButton.getGlobalBounds().width / 2, height / 2 + 150 ) );
 
+    backgroundTexture.loadFromFile( "Resources/images/HomeBackground.jpg" );
+    backgroundSprite.setTexture( backgroundTexture );
+    backgroundSprite.setScale( 2, 2 );
 }
 
 void Menu::draw( sf::RenderWindow& window ) {
+    window.draw( backgroundSprite );
     window.draw( playButton );
     window.draw( settingsButton );
     window.draw( instructionsButton );
