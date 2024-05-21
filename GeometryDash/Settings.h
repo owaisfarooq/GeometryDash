@@ -26,6 +26,9 @@ private:
     std::vector<sf::Text> shapeOptions;
     int selectedShapeIndex;
 
+    sf::Texture backgroundTexture;
+    sf::Sprite backgroundSprite;
+
     sf::Text colorText;
     std::vector<sf::RectangleShape> colorOptions;
     int selectedColorIndex;

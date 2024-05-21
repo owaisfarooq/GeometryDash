@@ -19,9 +19,15 @@ Instructions::Instructions( float width, float height ) {
     instructionsText.setCharacterSize( 24 );
     instructionsText.setFillColor( sf::Color::White );
     instructionsText.setPosition( sf::Vector2f( width / 10, height / 10 ) );
+
+    backgroundTexture.loadFromFile( "Resources/images/HomeBackground.jpg" );
+    backgroundSprite.setTexture( backgroundTexture );
+    backgroundSprite.setScale( 1.6, 1.75 );
+
 }
 
 void Instructions::draw( sf::RenderWindow& window ) {
+    window.draw( backgroundSprite );
     window.draw( instructionsText );
 }
 

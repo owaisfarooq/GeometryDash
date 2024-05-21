@@ -1,3 +1,4 @@
+
 // Instructions.h
 #ifndef INSTRUCTIONS_H
 #define INSTRUCTIONS_H
@@ -11,6 +12,8 @@ public:
     void handleEvent( sf::Event& event, sf::RenderWindow& window );
 
 private:
+    sf::Texture backgroundTexture;
+    sf::Sprite backgroundSprite;
     sf::Font font;
     sf::Text instructionsText;
 };

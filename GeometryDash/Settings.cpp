@@ -51,10 +51,13 @@ Settings::Settings( float width, float height ) : volume( 50.0f ), selectedShape
         colorOption.setFillColor( colors [ i ] );
         colorOptions.push_back( colorOption );
     }
+    backgroundTexture.loadFromFile( "Resources/images/Gamebackground.png" );
+    backgroundSprite.setTexture( backgroundTexture );
     updateColorSelection( width, height );
 }
 
 void Settings::draw( sf::RenderWindow& window ) {
+    window.draw( backgroundSprite );
     window.draw( volumeText );
     window.draw( volumeBar );
     window.draw( volumeIndicator );
