@@ -13,15 +13,25 @@ public:
     void reset();
     void increaseObstacleSpeed();
     void decreaseObstacleSpeed();
+    void toggleGodMode();
     bool isPlayerTouchingObstacle();
     void setPlayerShape( const std::string& shape );
     void setPlayerColor( sf::Color color );
 private:
     //sf::RectangleShape player;
     sf::ConvexShape player;
-    sf::RectangleShape obstacle;
+
+    sf::RectangleShape obstacleRect;
+    sf::CircleShape obstacleCircle;
+    sf::ConvexShape obstacleTriangle;
+    sf::Shape* currentObstacle; // Pointer to the current obstacle shape
+
+    void setRandomObstacleShape();
+
+
     sf::Text score;
-    sf::Text startingText;
+    sf::Text instructionsText;
+    sf::Text GODMODETEXT;
     sf::Font font;
     sf::Texture backgroundTexture;
     sf::Sprite backgroundSprite1;
@@ -38,10 +48,13 @@ private:
     float backgroundPosition;
     float maxJumpingHeight;
     float jumpIncrement;
+    float initialObstacleSpeed;
     float obstacleSpeed;
-    float obstacleSpeedIncremenet;
+    float obstacleSpeedIncrement;
     float scoreCount;
+    int lastBonusAtScore;
 
+    bool isGodModeEnabled;
     bool* pausePtr;
     bool isJumping;
 
@@ -51,6 +64,7 @@ private:
     void resetStats();
     void updateStats();
     void moveBackground(float deltaTime);
+    
 };
 
 #endif // GAME_H

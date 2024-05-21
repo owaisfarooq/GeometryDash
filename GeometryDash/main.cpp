@@ -72,11 +72,11 @@ int main() {
             } else if ( gameState == GameState::PLAYING ) {
                 if ( event.type == Event::KeyPressed ) {
                     bool isLost = game.isPlayerTouchingObstacle();
-                    if ( event.key.code == sf::Keyboard::Backspace ) {
-                        std::cout << "DEBUG BREAK";
-                    }
                     if ( event.key.code == sf::Keyboard::P && !isLost ) {
                         pause = true;
+                    }
+                    if ( event.key.code == sf::Keyboard::G ) {
+                        game.toggleGodMode();
                     }
                     if ( event.key.code == sf::Keyboard::R && isLost ) {
                         game.reset();

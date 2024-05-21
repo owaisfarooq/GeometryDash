@@ -32,7 +32,7 @@ Menu::Menu( float width, float height ) {
 
     backgroundTexture.loadFromFile( "Resources/images/HomeBackground.jpg" );
     backgroundSprite.setTexture( backgroundTexture );
-    backgroundSprite.setScale( 2, 2 );
+    backgroundSprite.setScale( 1.6, 1.75 );
 }
 
 void Menu::draw( sf::RenderWindow& window ) {
